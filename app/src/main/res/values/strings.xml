@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyFirst</string>
+    <string name="username">ZMS</string>
+    <string name="hello_str">Welcome</string>
+</resources>
