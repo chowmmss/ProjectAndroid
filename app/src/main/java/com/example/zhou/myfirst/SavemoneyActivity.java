@@ -30,7 +30,6 @@ public class SavemoneyActivity extends Activity {
         usd_Rate.setText(String.valueOf(usd2));
         jpy_Rate.setText(String.valueOf(jpy2));
         eup_Rate.setText(String.valueOf(eup2));
-
     }
     public void save(View view){
         float newUsd = Float.parseFloat(usd_Rate.getText().toString());
