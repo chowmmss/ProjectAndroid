@@ -14,10 +14,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.annotation.Documented;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,7 +46,7 @@ public class ExchangeActivity extends Activity implements Runnable{
         setContentView(R.layout.activity_exchange);
         money =  (EditText)findViewById(R.id.money);
         answer = (TextView)findViewById(R.id.answer);
-        Button eup = (Button)findViewById(R.id.toEUP);
+        final Button eup = (Button)findViewById(R.id.toEUP);
         Button usd = (Button)findViewById(R.id.toUSD);
         Button jpy = (Button)findViewById(R.id.toJPY);
         Button config = (Button)findViewById(R.id.opencfg);
@@ -55,12 +62,25 @@ public class ExchangeActivity extends Activity implements Runnable{
         t.start();
 
         handler = new Handler(){
+
             public void handleMessage(Message msg){
                 if(msg.what==5){
-                    String str = (String) msg.obj;
-                    answer.setText(str);
+                    Bundle bd1 = (Bundle)msg.obj;
+                    usdRate = bd1.getFloat("dollar_rate");
+                    jpyRate = bd1.getFloat("japan_rate");
+                    eupRate = bd1.getFloat("euro_rate");
+                    Toast.makeText(ExchangeActivity.this,"汇率已更新",Toast.LENGTH_SHORT);
+                    /*String str = (String) msg.obj;
+                    answer.setText(str);*/
                 }
                 super.handleMessage(msg);
+            }
+
+        };
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(this,5*1000);
             }
         };
 
@@ -133,22 +153,54 @@ public class ExchangeActivity extends Activity implements Runnable{
                 e.printStackTrace();
             }
         }
-//        获取信息
-        Message msg = handler.obtainMessage(5);
-        msg.obj="Hello from run()";
-        handler.sendMessage(msg);
-        URL url = null;
-        try{
-            url = new URL("www.usd-cny.com/icbc.htm");
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            InputStream in = http.getInputStream();
 
-            String html = inputStream2String(in);
-        }catch(MalformedURLException e){
-            e.printStackTrace();
+        Bundle bundle = new Bundle();
+        Document doc = null;
+        try{
+            String url2 = "http://www.usd-cny.com/bankofchina.htm";
+            doc = Jsoup.connect(url2).get();
+            Log.i("tag","run:"+doc.title());
+            Elements tables = doc.getElementsByTag("table");
+            Element table6 = tables.get(0);
+            Log.i("tag","run:table6="+table6);
+            Elements tds = table6.getElementsByTag("td");
+            for(int i = 0;i<tds.size();i+=6){
+                Element td1 = tds.get(i);
+                Element td2 = tds.get(i+5);
+                String str1 = td1.text();
+                String val = td2.text();
+                float v = 100f / Float.parseFloat(val);
+                if("美元".equals(str1)){
+                    bundle.putFloat("dollar_rate",v);
+                }
+                else if("日元".equals(str1)){
+                    bundle.putFloat("japan_rate",v);
+                }
+                else if("欧元".equals(str1)){
+                    bundle.putFloat("euro_rate",v);
+                }
+            }
+            //        获取信息
+            Message msg = handler.obtainMessage(5);
+            msg.obj=bundle;
+            handler.sendMessage(msg);
+//            handler.postDelayed(task,1000);
         }catch(IOException e){
             e.printStackTrace();
         }
+
+//        URL url = null;
+//        try{
+//            url = new URL("www.usd-cny.com/icbc.htm");
+//            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//            InputStream in = http.getInputStream();
+//            String html = inputStream2String(in);
+//
+//        }catch(MalformedURLException e){
+//            e.printStackTrace();
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
 
     }
     private String inputStream2String(InputStream inputStream)throws IOException{
