@@ -19,6 +19,7 @@
         android:layout_marginBottom="32dp"
         android:background="#bdbbbb"
 
+        android:onClick="setBtn"
         android:text="RESET" />
     <LinearLayout
         android:orientation="vertical"
