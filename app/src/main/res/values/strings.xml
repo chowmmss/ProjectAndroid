@@ -1,5 +1,29 @@
 <resources>
     <string name="app_name">MyFirst</string>
     <string name="username">ZMS</string>
-    <string name="hello_str">Welcome</string>
+    <string name="hello_str">login</string>
+    <string name="score">0</string>
+    <string name="title_activity_week3">Week3Activity</string>
+    <string name="weight">Weight,KG</string>
+    <string name="height">Height,m</string>
+    <string name="title_activity_exchange">ExchangeActivity</string>
+    <string name="money">input money</string>
+    <string name="title_activity_savemoney">SavemoneyActivity</string>
+    <string name="btn_toUSD">toUSD</string>
+    <string name="btn_toJPY">toJPY</string>
+    <string name="btn_toEUP">toEUP</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_simple_list">SimpleListActivity</string>
+    <string name="title_activity_emptylist">EmptylistActivity</string>
+    <string name="title_activity_ratelist">RatelistActivity</string>
+    <string name="title_activity_listclick">ListclickActivity</string>
+    <string name="title_activity_dbhelper">DBHelperActivity</string>
+    <string name="title_activity_dbhelperlist">DBHelperlistActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_my_beibei">MyBeibeiActivity</string>
+    <string name="title_activity_singleword">SinglewordActivity</string>
+    <string name="title_activity_fragment">FragmentActivity</string>
+    <string name="title_activity_frage">FrageActivity</string>
+    <string name="title_activity_spellword">SpellwordActivity</string>
+    <string name="title_activity_my_beibei2">MyBeibei2Activity</string>
 </resources>
